@@ -1,0 +1,11 @@
+{
+  "name": "nodejs-examples",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "couchbase": "2.0.12"
+  }
+}
