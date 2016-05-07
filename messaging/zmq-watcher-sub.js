@@ -9,18 +9,20 @@
 "use strict";
 const
   zmq = require('zmq'),
-  filename = process.argv[2],
-  // create request endpoint
-  requester = zmq.socket('req');
-// handle replies from responder
-requester.on("message", function(data) {
-  let response = JSON.parse(data);
-  console.log("Received response:", response);
-});
-requester.connect("tcp://localhost:5433");
-// send request for content
-console.log('Sending request for ' + filename);
-requester.send(JSON.stringify({
-  path: filename
-}));
+  
+  // create subscriber endpoint
+  subscriber = zmq.socket('sub');
 
+// subscribe to all messages
+subscriber.subscribe("");
+
+// handle messages from publisher
+subscriber.on("message", function(data) {
+  let
+    message = JSON.parse(data),
+    date = new Date(message.timestamp);
+  console.log("File '" + message.file + "' changed at " + date);
+});
+
+// connect to publisher
+subscriber.connect("tcp://localhost:5432");
